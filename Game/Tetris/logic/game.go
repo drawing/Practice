@@ -81,6 +81,24 @@ func (g *Game) Move(direction Direction) {
 	}
 }
 
+func (g *Game) GetPlat() [VA_WORLD_HEIGHT][VA_WORLD_WIDTH]int {
+	p := [VA_WORLD_HEIGHT][VA_WORLD_WIDTH]int{}
+	for i := 0; i < len(g.plat.cell); i++ {
+		for j := 0; j < len(g.plat.cell[i]); j++ {
+			p[i][j] = g.plat.cell[i][j]
+		}
+	}
+	for i := 0; i < VA_SHAPE_SIZE; i++ {
+		for j := 0; j < VA_SHAPE_SIZE; j++ {
+			if g.shape.Current()[i][j] != 0 {
+				p[g.pos.Row+i][g.pos.Col+j] = g.shape.Current()[i][j]
+			}
+		}
+	}
+
+	return p
+}
+
 func (g *Game) Rotate() {
 	s := g.shape.NextRotate()
 	if g.Check(&g.plat, &g.pos, s) {

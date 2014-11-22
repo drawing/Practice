@@ -44,6 +44,8 @@ var AllShape = [][]Square{
 	Shape_O,
 	Shape_T,
 	Shape_L,
+	Shape_I,
+	Shape_M,
 }
 
 var Shape_S = []Square{
@@ -176,6 +178,15 @@ var Shape_I = []Square{
 	{
 		{0, 0, 0, 0},
 		{16, 16, 16, 16},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0},
+	},
+}
+
+var Shape_M = []Square{
+	{
+		{0, 0, 0, 0},
+		{0, 17, 0, 0},
 		{0, 0, 0, 0},
 		{0, 0, 0, 0},
 	},

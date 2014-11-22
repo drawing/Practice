@@ -39,6 +39,8 @@ func (p *Plat) Eliminate(height int) bool {
 		return false
 	}
 
+	//fmt.Println(height)
+
 	// check
 	for i := VA_WALL_DEPTH; i < VA_PLAT_WIDTH+VA_WALL_DEPTH; i++ {
 		if p.cell[height][i] == 0 {
@@ -48,7 +50,7 @@ func (p *Plat) Eliminate(height int) bool {
 
 	// down
 	for i := height; i >= VA_WALL_DEPTH; i-- {
-		for j := VA_WALL_DEPTH; j <= VA_PLAT_WIDTH+VA_WALL_DEPTH; j++ {
+		for j := VA_WALL_DEPTH; j < VA_PLAT_WIDTH+VA_WALL_DEPTH; j++ {
 			if i == VA_WALL_DEPTH {
 				p.cell[i][j] = 0
 			} else {
