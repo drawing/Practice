@@ -18,6 +18,9 @@ func draw(game *logic.Game) {
 	for i := 0; i < len(plat); i++ {
 		for j := 0; j < len(plat[i])*2; j += 2 {
 			cl := plat[i][j/2]%8 + 1
+			if cl == 1 && plat[i][j/2] != 0 {
+				cl = 3
+			}
 			termbox.SetCell(j, i, ' ', termbox.ColorDefault,
 				termbox.Attribute(cl))
 			termbox.SetCell(j+1, i, ' ', termbox.ColorDefault,
