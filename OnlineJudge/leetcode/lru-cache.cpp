@@ -14,10 +14,19 @@
 using namespace std;
 
 class LRUCache {
+
+private:
+	struct Node {
+		int key;
+		int val;
+		Node * next;
+		Node * pre;
+	};
 public:
 	LRUCache(int capacity) {
 		_capacity = capacity;
-		_seq = 0;
+		_head = NULL;
+		_tail = NULL;
 	}
 
 	int get(int key) {
@@ -25,59 +34,92 @@ public:
 			return -1;
 		}
 
-		int seq = _seq ++;
-		Node node = _data[key];
+		Node * node = _data[key];
 
-		_access.erase(node.seq);
-		node.seq = seq;
-
-		_data[key] = node;
-		_access[seq] = key;
-
-		return node.val;
+		remove(node);
+		add(node);
+		
+		return node->val;
 	}
 
 	void set(int key, int value) {
-		int seq = _seq ++;
+
 		if (_data.find(key) == _data.end()) {
 
+			Node * node = NULL;
 			if (_data.size() >= _capacity) {
-				map<int, int>::iterator i = _access.begin();
-				int dseq = i->first;
-				int dkey = i->second;
+				node = last();
 				
-				_data.erase(dkey);
-				_access.erase(dseq);
+				_data.erase(node->key);
+				remove(node);
+			}
+			else {
+				node = new Node();
 			}
 
-			Node node;
-			node.val = value;
-			node.seq = seq;
-
+			node->key = key;
+			node->val = value;
 			_data[key] = node;
-			_access[seq] = key;
+			add(node);
 		} else {
-			Node node = _data[key];
-			_access.erase(node.seq);
-
-			node.val = value;
-			node.seq = seq;
-			_data[key] = node;
-			_access[seq] = key;
+			Node * node = _data[key];
+			node->val = value;
+			remove(node);
+			add(node);
 		}
 	}
 
 private:
+	void remove(Node * node) {
+		if (node->next) {
+			node->next->pre = node->pre;
+		}
+		if (node->pre) {
+			node->pre->next = node->next;
+		}
+		if (node == _head) {
+			_head = node->next;
+		}
+		if (node == _tail) {
+			_tail = node->pre;
+		}
+	}
+
+	void add(Node * node) {
+		node->pre = NULL;
+		node->next = _head;
+
+		if (_head) {
+			_head->pre = node;
+		}
+
+		_head = node;
+
+		if (_tail == NULL) {
+			_tail = node;
+		}
+	}
+
+	void print() {
+		Node * node = _head;
+		cout << "Print: ";
+		for (; node; node = node->next) {
+			cout << node->key << " ";
+		}
+		cout << endl;
+	}
+
+	Node * last() {
+		return _tail;
+	}
+
+private:
 	int _capacity;
-	int _seq;
 
-	struct Node {
-		int val;
-		int seq;
-	};
+	Node * _head;
+	Node * _tail;
 
-	map<int, Node> _data;
-	map<int, int> _access;
+	map<int, Node *> _data;
 };
 
 
