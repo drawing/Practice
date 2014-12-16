@@ -25,14 +25,8 @@ public:
 		for (size_t i = 0; i < numbers.size(); i++) {
 			int tmp = target - numbers[i];
 			if (elem.find(tmp) != elem.end()) {
-				if (tmp > numbers[i]) {
-					result.push_back(i);
-					result.push_back(elem[tmp]);
-				}
-				else {
-					result.push_back(elem[tmp]);
-					result.push_back(i);
-				}
+				result.push_back(std::min(int(i + 1), elem[tmp] + 1));
+				result.push_back(std::max(int(i + 1), elem[tmp] + 1));
 				break;
 			}
 			elem[numbers[i]] = i;
