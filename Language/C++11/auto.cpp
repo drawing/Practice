@@ -7,6 +7,11 @@
 
 using namespace std;
 
+auto func() -> int {
+	int a = 10;
+	return a;
+}
+
 int main()
 {
 	vector<int> vec;
@@ -17,6 +22,8 @@ int main()
 
 	cout << *i << endl;
 	cout << vec[j] << endl;
+
+	int b = func();
 	return 0;
 }
 
