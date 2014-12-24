@@ -31,6 +31,10 @@ int main()
 	std::for_each(vec.begin(), vec.end(), [](int & v){ cout << v++ << ":"; cout << v << endl;});
 	cout << endl;
 
+	int in = 10;
+	std::for_each(vec.begin(), vec.end(), [in, &out](int v){ cout << v << ":" << in << ":" << out++ << endl;});
+	cout << endl;
+
 	return 0;
 }
 
