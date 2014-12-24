@@ -6,6 +6,9 @@ using namespace std;
 
 struct Shape {
 	string name;
+	bool operator==(const Shape & other) const {
+		return name == other.name;
+	}
 };
 
 namespace std
@@ -17,6 +20,7 @@ namespace std
 			return std::hash<std::string>()(s.name);
 		}
 	};
+	/*
 	template<>
 	struct equal_to<Shape>
 	{
@@ -24,6 +28,7 @@ namespace std
 			return s1.name == s2.name;
 		}
 	};
+	*/
 }
 
 int main()
