@@ -16,15 +16,36 @@
  */
 
 #include <unordered_set>
+#include <iostream>
 
 using namespace std;
 
 int main()
 {
-	unordered_set<int> set;
-	set.insert(1);
-	set.insert(2);
-	set.insert(3);
+	unordered_set<int> st;
+
+	cout << st.max_load_factor() << endl;
+	cout << st.load_factor() << endl;
+	cout << st.bucket_count() << endl;
+	cout << st.max_bucket_count() << endl;
+	cout << st.max_load_factor() << endl;
+
+	st.insert(2);
+	st.insert({1, 2, 3, 5, 6});
+
+	for (int i = 0; i < 47; i++) {
+		st.insert(i);
+	}
+
+	cout << st.max_load_factor() << endl;
+	cout << st.load_factor() << endl;
+	cout << st.bucket_count() << endl;
+	cout << st.max_bucket_count() << endl;
+	cout << st.max_load_factor() << endl;
+
+	cout << st.bucket_size(0) << endl;
+
+	st.rehash(100); // real 103
 
 	return 0;
 }
