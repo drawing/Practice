@@ -1,4 +1,5 @@
 #include <iostream>
+#include <tuple>
 
 using namespace std;
 
@@ -11,6 +12,9 @@ int main()
 	int a, b, c, d;
 	std::tie(a, b, c, d) = fun();
 	cout << a << " " << b << " " << c << endl;
+
+	auto t = fun();
+	int one = std::get<0>(t);
 	return 0;
 }
 
