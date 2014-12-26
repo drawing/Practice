@@ -4,6 +4,18 @@
 
 using namespace std;
 
+class Container {
+public:
+	int data[10];
+};
+
+int* begin(Container & c) {
+	return &c.data[0];
+}
+int* end(Container & c) {
+	return &c.data[10];
+}
+
 int main()
 {
 	vector<int> vec;
@@ -28,6 +40,13 @@ int main()
 	for (auto k: vec) {
 		cout << k << " ";
 	}
+
+
+	Container c;
+	for (auto k : c) {
+		cout << k << " ";
+	}
+	cout << endl;
 	cout << endl;
 
 	return 0;
