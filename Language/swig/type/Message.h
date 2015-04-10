@@ -3,6 +3,7 @@
 
 class Message {
 public:
+	Message(const Message & msg);
 	void SetTime(time_t update);
 	void SetSeq(int32_t seq);
 };

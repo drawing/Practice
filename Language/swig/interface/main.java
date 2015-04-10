@@ -4,9 +4,12 @@
 
 import com.tencent.shape.Shape;
 import com.tencent.shape.Painter;
+import com.tencent.shape.Param;
 
 class Circle extends Shape {
-public void draw() {
+public void draw(Param param) {
+	System.out.println(param.getOne());
+	System.out.println(param.getTwo());
 	System.out.println("drawing a circle");
 }
 }

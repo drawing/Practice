@@ -3,7 +3,10 @@
 
 void Painter::drawShape(Shape * shape)
 {
-	shape->draw();
+	Param p;
+	p.one = "testddd";
+	p.two = "ddd";
+	shape->draw(p);
 }
 
 
