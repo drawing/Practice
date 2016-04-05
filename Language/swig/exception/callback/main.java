@@ -19,7 +19,7 @@ public void draw(Param param) {
 
 public class main {
 	public static void main(String argv[]) {
-		System.load("/home/cppbreak/workspace/Practice/Language/swig/exception/callback/libdrawing.so");
+		System.load(System.getProperty("user.dir") + "/libdrawing.so");
 
 		System.out.println("start...");
 		new Thread() {
