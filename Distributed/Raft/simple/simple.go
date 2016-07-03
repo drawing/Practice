@@ -101,12 +101,13 @@ func main() {
 		go doRaftLogic(node, nodes)
 	}
 
-	log.Println("Start Sleep")
+	log.Println("start sleep")
 	time.Sleep(500 * time.Millisecond)
-	log.Println("Start Propose")
 
+	log.Println("start propose")
 	nodes[1].Node.Propose(context.TODO(), []byte("Data1"))
 	nodes[2].Node.Propose(context.TODO(), []byte("Data2"))
+	log.Println("start propose")
 
 	time.Sleep(10 * time.Second)
 }
