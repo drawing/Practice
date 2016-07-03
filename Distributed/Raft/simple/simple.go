@@ -30,15 +30,27 @@ func doRaftLogic(node *SimpleNode, nodes map[uint64]*SimpleNode) {
 		case <-ticker:
 			node.Node.Tick()
 		case rd := <-node.Node.Ready():
-			// log.Println("recv msg:", rd)
+			// 1. HardState
+			if !raft.IsEmptyHardState(rd.HardState) {
+				node.storage.SetHardState(rd.HardState)
+			}
+			// 2. Entries
 			node.storage.Append(rd.Entries)
-			time.Sleep(time.Millisecond)
+			// 3. Snapshot
+			if !raft.IsEmptySnap(rd.Snapshot) {
+				node.storage.ApplySnapshot(rd.Snapshot)
+			}
 
-			for _, entry := range rd.Entries {
-				if entry.Type == raftpb.EntryNormal {
-					log.Println(node.Id, "entry data:", string(entry.Data))
+			for _, entry := range rd.CommittedEntries {
+				log.Println("commit:", entry)
+				if entry.Type == raftpb.EntryConfChange {
+					var cc raftpb.ConfChange
+					cc.Unmarshal(entry.Data)
+					node.Node.ApplyConfChange(cc)
 				}
 			}
+
+			time.Sleep(time.Millisecond)
 
 			for _, m := range rd.Messages {
 				nodes[m.To].Recv <- m
