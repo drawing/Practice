@@ -12,7 +12,6 @@ import (
 type SimpleNode struct {
 	Id   uint64
 	Recv chan raftpb.Message
-	Send chan raftpb.Message
 
 	Node    raft.Node
 	storage *raft.MemoryStorage
@@ -89,7 +88,6 @@ func main() {
 		simpleNode := &SimpleNode{
 			Id:      i,
 			Recv:    make(chan raftpb.Message, 255),
-			Send:    make(chan raftpb.Message, 255),
 			Node:    node,
 			storage: storage,
 		}
