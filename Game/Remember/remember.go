@@ -221,7 +221,9 @@ func main() {
 
 				select {
 					case <-step:
-						wait.Reset(*waitTime)
+						if (*waitTime != 0) {
+							wait.Reset(*waitTime)
+						}
 					case <-wait.C:
 						wait.Reset(*waitTime)
 				}
