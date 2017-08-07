@@ -123,7 +123,6 @@ var codes = map[string]string{
 	"99": "舅舅",
 }
 
-
 func randQuestion(data [][]string) {
 	for i := 0; i < len(data)-1; i++ {
 		left := len(data) - 1 - i
@@ -168,7 +167,7 @@ func main() {
 		}
 	}
 	wait := time.NewTimer(time.Second * 60)
-	if (*waitTime == 0) {
+	if *waitTime == 0 {
 		wait.Stop()
 	} else {
 		wait.Reset(*waitTime)
@@ -186,12 +185,12 @@ func main() {
 	prograss.Width = screenWidth
 	prograss.Height = 3
 	prograss.Y = screenHeight - 3
-	prograss.BorderLabel = "Gauge"
+	prograss.BorderLabel = "Prograss"
 	prograss.BarColor = termui.ColorGreen
 	prograss.BorderFg = termui.ColorWhite
 	prograss.BorderLabelFg = termui.ColorCyan
-	
-	const rowSize = 10
+
+	const rowSize = 25
 	rowsQuestion := make([][]string, rowSize)
 
 	rowsQuestion[0] = []string{"    Question    ", "    Answer    "}
@@ -202,8 +201,12 @@ func main() {
 	tableQuestion.BgColor = termui.ColorDefault
 	tableQuestion.Y = 4
 	tableQuestion.X = 0
+	tableQuestion.Separator = false
 	tableQuestion.Width = screenWidth
-	tableQuestion.Height = 2 * rowSize + 1
+	tableQuestion.Height = rowSize + 2
+	if tableQuestion.Separator {
+		tableQuestion.Height = 2*rowSize + 1
+	}
 
 	step := make(chan int)
 	go func() {
@@ -220,23 +223,23 @@ func main() {
 				termui.Render(prograss, tableQuestion)
 
 				select {
-					case <-step:
-						if (*waitTime != 0) {
-							wait.Reset(*waitTime)
-						}
-					case <-wait.C:
+				case <-step:
+					if *waitTime != 0 {
 						wait.Reset(*waitTime)
+					}
+				case <-wait.C:
+					wait.Reset(*waitTime)
 				}
 
 				row[1] = issue[1]
 				rows[index] = row
 
-				if index == rowSize - 1 {
+				if index == rowSize-1 {
 					for i := 2; i < rowSize; i++ {
 						rows[i-1] = rows[i]
 					}
 				} else {
-					index ++
+					index++
 				}
 			}
 		}
