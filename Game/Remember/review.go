@@ -6,7 +6,9 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/gizak/termui"
+	termui "github.com/gizak/termui/v3"
+	"github.com/gizak/termui/v3/widgets"
+
 	"github.com/nsf/termbox-go"
 )
 
@@ -173,39 +175,35 @@ func main() {
 		wait.Reset(*waitTime)
 	}
 
-	tips := termui.NewPar(":PRESS q TO QUIT Practice")
-	tips.Height = 3
-	tips.Width = screenWidth
-	tips.TextFgColor = termui.ColorWhite
-	tips.BorderLabel = "TIPS"
-	tips.BorderFg = termui.ColorCyan
+	tips := widgets.NewParagraph()
+	tips.Text = ":PRESS q TO QUIT Practice"
+	tips.SetRect(0, 0, screenWidth, 3)
+	tips.TextStyle.Fg = termui.ColorWhite
+	tips.BorderStyle.Fg = termui.ColorCyan
+	tips.Title = "TIPS"
+	tips.TitleStyle.Fg = termui.ColorYellow
 
-	prograss := termui.NewGauge()
+	prograss := widgets.NewGauge()
 	prograss.Percent = 0
-	prograss.Width = screenWidth
-	prograss.Height = 3
-	prograss.Y = screenHeight - 3
-	prograss.BorderLabel = "Prograss"
+	prograss.SetRect(0, screenHeight - 3, screenWidth, screenHeight)
 	prograss.BarColor = termui.ColorGreen
-	prograss.BorderFg = termui.ColorWhite
-	prograss.BorderLabelFg = termui.ColorCyan
+	prograss.Title = "Prograss"
+	prograss.BorderStyle.Fg = termui.ColorCyan
+	prograss.TitleStyle.Fg = termui.ColorYellow
 
 	const rowSize = 25
 	rowsQuestion := make([][]string, rowSize)
 
 	rowsQuestion[0] = []string{"    Question    ", "    Answer    "}
 
-	tableQuestion := termui.NewTable()
+	tableQuestion := widgets.NewTable()
 	tableQuestion.Rows = rowsQuestion
-	tableQuestion.FgColor = termui.ColorWhite
-	tableQuestion.BgColor = termui.ColorDefault
-	tableQuestion.Y = 4
-	tableQuestion.X = 0
-	tableQuestion.Separator = false
-	tableQuestion.Width = screenWidth
-	tableQuestion.Height = rowSize + 2
-	if tableQuestion.Separator {
-		tableQuestion.Height = 2*rowSize + 1
+	tableQuestion.TextStyle.Fg = termui.ColorWhite
+	tableQuestion.SetRect(0, 4, screenWidth, 4 + rowSize + 2)
+	tableQuestion.BorderStyle.Fg = termui.ColorCyan
+	tableQuestion.RowSeparator = false
+	if tableQuestion.RowSeparator {
+		tableQuestion.SetRect(0, 4, screenWidth, 4 + 2*rowSize + 1)
 	}
 
 	step := make(chan int)
@@ -247,15 +245,17 @@ func main() {
 
 	termui.Render(tips, prograss, tableQuestion)
 
-	termui.Handle("/sys/kbd/q", func(termui.Event) {
-		termui.StopLoop()
-	})
-	termui.Handle("/sys/kbd/<escape>", func(termui.Event) {
-		termui.StopLoop()
-	})
-	termui.Handle("/sys/kbd/<enter>", func(termui.Event) {
-		step <- 1
-	})
+	uiEvents := termui.PollEvents()
 
-	termui.Loop()
+	for {
+		select {
+		case e := <-uiEvents:
+			switch e.ID {
+			case "q", "<C-c>", "<Escape>":
+				return
+			case "<Enter>", "<Space>":
+				step <- 1
+			}
+		}
+	}
 }
